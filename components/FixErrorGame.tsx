@@ -84,7 +84,6 @@ const FixErrorGame: React.FC<FixErrorGameProps> = ({ onScore, onClose }) => {
   const [isFinished, setIsFinished] = useState(false);
 
   useEffect(() => {
-    // Увеличиваем количество заданий до 5 за сессию для лучшей проработки
     const shuffled = [...ERRORS_POOL].sort(() => 0.5 - Math.random()).slice(0, 5);
     setCurrentPool(shuffled);
   }, []);
@@ -94,7 +93,6 @@ const FixErrorGame: React.FC<FixErrorGameProps> = ({ onScore, onClose }) => {
     setLoading(true);
     try {
       const currentTask = currentPool[currentIndex];
-      // Включаем в промпт требование более строгой оценки для корпоративного обучения
       const analysis = await analyzeResponse(
         `СИТУАЦИЯ: ${currentTask.context}. ПЛОХОЙ ОТВЕТ: "${currentTask.bad}". Твоя задача оценить, насколько ИСПРАВЛЕННЫЙ вариант соответствует стандартам клиентского сервиса RBT.RU.`,
         input

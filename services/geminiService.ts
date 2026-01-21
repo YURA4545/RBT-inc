@@ -1,23 +1,17 @@
 
 import { GoogleGenAI, Type } from "@google/genai";
 
-const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-
-if (!apiKey) {
-  throw new Error("Missing VITE_GEMINI_API_KEY. Set it in .env.local.");
-}
-
-const ai = new GoogleGenAI({ apiKey });
+const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
 const MODEL_NAME = 'gemini-3-flash-preview';
 
 export const checkSpelling = async (text: string) => {
   const result = await ai.models.generateContent({
     model: MODEL_NAME,
-    contents: `Ты — корректор русского языка. Проверь текст на орфографические, грамматические и пунктуационные ошибки.
+    contents: `Ты — корректор русского языка и эксперт по деловой переписке. Проверь текст на орфографические, грамматические и пунктуационные ошибки. Также проверь стиль: он должен быть профессиональным и вежливым.
     ТЕКСТ: "${text}"
     
-    Верни исправленный текст и список найденных ошибок.
+    Верни исправленный текст и краткое описание исправлений.
     Формат JSON.`,
     config: {
       responseMimeType: "application/json",

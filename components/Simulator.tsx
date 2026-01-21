@@ -49,7 +49,6 @@ const Simulator: React.FC<SimulatorProps> = ({ onScore }) => {
     }
   }, [messages, loading]);
 
-  // КРИТИЧЕСКОЕ ОБНОВЛЕНИЕ: Сохранение в реестр
   const forceSaveToRegistry = (evaluation: AIAnalysis | null, isLeft: boolean, finalMessages: any[]) => {
     const savedUser = localStorage.getItem('rbt_academy_user');
     if (!savedUser) return;
@@ -73,7 +72,6 @@ const Simulator: React.FC<SimulatorProps> = ({ onScore }) => {
       const history = registry[user.name].lastSimulatorSession || [];
       registry[user.name].lastSimulatorSession = [sessionData, ...history].slice(0, 50);
       
-      // Обновляем общий XP в реестре сразу
       if (evaluation) {
          registry[user.name].xp = (registry[user.name].xp || 0) + evaluation.score;
       } else if (isLeft) {
@@ -96,6 +94,8 @@ const Simulator: React.FC<SimulatorProps> = ({ onScore }) => {
           corrected: result.correctedText,
           explanation: result.explanation
         });
+      } else {
+        alert("Ошибок не обнаружено. Ваш ответ выглядит профессионально!");
       }
     } catch (e) {
       console.error("Spellcheck error", e);
@@ -105,9 +105,9 @@ const Simulator: React.FC<SimulatorProps> = ({ onScore }) => {
   };
 
   const handleSend = async () => {
-    if (!input.trim() || loading || sessionAnalysis || clientLeft) return;
-    
     const textToSend = input;
+    if (!textToSend.trim() || loading || sessionAnalysis || clientLeft) return;
+    
     setInput('');
     setSpellCorrection(null);
 
@@ -169,7 +169,6 @@ const Simulator: React.FC<SimulatorProps> = ({ onScore }) => {
 
   return (
     <div className="max-w-4xl mx-auto h-[calc(100vh-160px)] flex flex-col gap-6 animate-in slide-in-from-right-4 duration-500 w-full text-left">
-      {/* Header Info */}
       <div className="bg-white p-8 rounded-[3rem] shadow-xl border border-gray-100 flex flex-col md:flex-row items-center justify-between gap-6">
         <div className="flex items-center gap-6">
           <div className="relative">
@@ -200,7 +199,6 @@ const Simulator: React.FC<SimulatorProps> = ({ onScore }) => {
         </div>
       </div>
 
-      {/* Chat Area */}
       <div ref={scrollRef} className="flex-1 bg-white/80 backdrop-blur-md rounded-[3.5rem] shadow-inner border border-white overflow-y-auto p-10 space-y-8 custom-scrollbar">
         {messages.map((m, i) => (
           <div key={i} className={`flex items-start gap-4 ${m.role === 'user' ? 'flex-row-reverse' : 'flex-row'} animate-in slide-in-from-bottom-2`}>
@@ -236,7 +234,6 @@ const Simulator: React.FC<SimulatorProps> = ({ onScore }) => {
         )}
       </div>
 
-      {/* Input Area */}
       {!sessionAnalysis && !clientLeft && (
         <div className="relative">
           {spellCorrection && (
